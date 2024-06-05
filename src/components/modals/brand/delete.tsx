@@ -9,7 +9,7 @@ export function DeleteBrandModal({ id }: any) {
   const [openModal, setOpenModal] = useState(false);
   const { deleteBrand } = useBrandStore();
 
-  const handleDelete = async (e) => {
+  const handleDelete = async (e: any) => {
     e.preventDefault();
     console.log(id);
 

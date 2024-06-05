@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 // ---------------------- Signin ----------------------
 export const schemaSignin = Yup.object().shape({
-  PhoneNumber: Yup.string()
+  phone_number: Yup.string()
     .min(19, "Invalid phone number")
     .required("Phone is required"),
   password: Yup.string()
@@ -32,7 +32,6 @@ export const schemaSignup = Yup.object().shape({
 // ---------------------- Category ----------------------
 export const schemaCatgory = Yup.object().shape({
   name: Yup.string().required("Category name is required"),
-  parent_category_id: Yup.number().required("Parent Category is required"),
 });
 
 // ---------------------- Brand ----------------------

@@ -1,6 +1,6 @@
 import { useBrandStore } from "@store";
 import { editIcon } from "@global-icons";
-import { CreateBrandModal, DeleteBrandModal } from "@modals";
+import { CreateBrandModal, DeleteBrandModal, UpdateBrandModal } from "@modals";
 import { Table } from "flowbite-react";
 import { useEffect } from "react";
 
@@ -26,7 +26,9 @@ const index = () => {
               <Table.HeadCell key={index}>{item.value}</Table.HeadCell>
             ))}
             <Table.HeadCell>
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">
+                <UpdateBrandModal />
+              </span>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">

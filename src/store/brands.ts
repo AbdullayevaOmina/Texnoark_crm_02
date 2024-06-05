@@ -36,7 +36,7 @@ const usebrandsStore = create<BrandStore>((set, get) => ({
         toast.success("Brand updated successfully");
         const currentData = get().data;
         const updatedData = currentData.map((item) =>
-          item.id === data.id ? response.data.brands : item
+          item.id === data.id ? response.data.brand : item
         );
         set({ data: updatedData });
       }
@@ -84,7 +84,7 @@ const usebrandsStore = create<BrandStore>((set, get) => ({
   deleteBrand: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await brands.delete(id);
+      const response: any = await brands.deleteBrand(id);
       if (response.status === 200) {
         toast.success("brand deleted successfully");
         const currentData = get().data;

@@ -16,15 +16,15 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   const initialValues: Signin = {
-    PhoneNumber: "",
+    phone_number: "",
     password: "Ominaweb12@",
   };
 
   const handleSubmit = async (values: Signin) => {
     console.log(values);
 
-    const phNumber = values.PhoneNumber.replace(/\D/g, "");
-    const payload = { ...values, PhoneNumber: `+${phNumber}` };
+    const phNumber = values.phone_number.replace(/\D/g, "");
+    const payload = { ...values, phone_number: `+${phNumber}` };
     const status = await signin(payload);
     if (status === 200) {
       navigate("/main");
@@ -50,7 +50,7 @@ export default function SignIn() {
             {({ isSubmitting }) => (
               <Form className="grid gap-2">
                 <MaskedInput
-                  name="PhoneNumber"
+                  name="phone_number"
                   type="tel"
                   mask="+998 (__) ___-__-__"
                   placeholder="+998 (__) ___-__-__"

@@ -1,7 +1,7 @@
 "use client";
 import { useCategoryStore } from "@store";
 import { CreateCategory } from "@category-interface";
-import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
+import { Button, Modal, Spinner, TextInput } from "flowbite-react";
 import { ErrorMessage, Field, Formik } from "formik";
 import { useState } from "react";
 import { Form } from "formik";
@@ -9,7 +9,7 @@ import { schemaCatgory } from "@validations";
 
 export function CreateCategoryModal() {
   const [openModal, setOpenModal] = useState(false);
-  const { data, create } = useCategoryStore();
+  const { create } = useCategoryStore();
 
   function onCloseModal() {
     setOpenModal(false);
@@ -17,21 +17,11 @@ export function CreateCategoryModal() {
 
   const initialValues: CreateCategory = {
     name: "",
-    parent_category_id: null,
   };
 
   const handleSubmit = async (values: CreateCategory) => {
-    console.log(values);
-    const id = parseInt(values.parent_category_id);
-    const payload = {
-      ...values,
-      parent_category_id: id,
-    };
-    console.log(payload);
-
-    const status = await create(payload);
+    const status = await create(values);
     if (status === 201) {
-      console.log(status);
       setOpenModal(false);
     }
   };
@@ -65,26 +55,6 @@ export function CreateCategoryModal() {
                       />
                     }
                   />
-                  <Field
-                    name="parent_category_id"
-                    type="number"
-                    as={Select}
-                    placeholder="Parent Category ID"
-                    helperText={
-                      <ErrorMessage
-                        name="parent_category_id"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  >
-                    {data.map((item, _) => (
-                      <option key={_} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Field>
-
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>

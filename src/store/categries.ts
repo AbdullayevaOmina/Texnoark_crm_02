@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const useCategoryStore = create<CategoryStore>((set, get) => ({
   data: [],
   isLoading: false,
-
+  totalCount: 1,
   create: async (reqdata: CreateCategory) => {
     set({ isLoading: true });
     try {
@@ -66,12 +66,15 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
     return null;
   },
 
-  getAll: async () => {
+  getAll: async (params) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.getAll();
+      const response: any = await categories.getAll(params);
       if (response.status === 200) {
-        set({ data: response.data.data });
+        set({
+          data: response.data.data.categories,
+          totalCount: response.data.data.count,
+        });
       }
     } catch (error) {
       console.error("Fetch categories error:", error);

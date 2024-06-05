@@ -6,6 +6,7 @@ import { ErrorMessage, Field, Formik } from "formik";
 import { useState } from "react";
 import { Form } from "formik";
 import { schemaCatgory } from "@validations";
+import { editIcon } from "@global-icons";
 
 export function UpdateCategoryModal() {
   const [openModal, setOpenModal] = useState(false);
@@ -38,13 +39,13 @@ export function UpdateCategoryModal() {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Create Category</Button>
+      <button onClick={() => setOpenModal(true)}>{editIcon}</button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
             <h3 className="text-2xl font-medium text-gray-900 dark:text-white text-center">
-              Create Category
+              Update Category
             </h3>
             <Formik
               initialValues={initialValues}
@@ -89,10 +90,10 @@ export function UpdateCategoryModal() {
                     {isSubmitting ? (
                       <>
                         <Spinner aria-label="Submitting" size="md" />{" "}
-                        Creating...
+                        Updating...
                       </>
                     ) : (
-                      "Create"
+                      "Update"
                     )}
                   </Button>
                 </Form>

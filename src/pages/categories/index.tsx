@@ -11,7 +11,7 @@ const Index = () => {
   const { data, isLoading, getAll, update, deleteCategory } =
     useCategoryStore();
   useEffect(() => {
-    getAll();
+    getAll({ page: 1, limit: 10, search: "" });
   }, [update, deleteCategory]);
 
   return (

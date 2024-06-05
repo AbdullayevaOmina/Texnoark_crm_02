@@ -9,7 +9,7 @@ export function DeleteCategoryModal({ id }: any) {
   const [openModal, setOpenModal] = useState(false);
   const { deleteCategory } = useCategoryStore();
 
-  const handleDelete = async (e) => {
+  const handleDelete = async (e: any) => {
     e.preventDefault();
     console.log(id);
 
