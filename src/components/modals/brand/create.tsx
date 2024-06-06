@@ -1,18 +1,21 @@
 "use client";
-import { useBrandStore } from "@store";
+import { useCategoryStore, useBrandStore } from "@store";
 import { CreateBrand } from "@brands-interface";
 import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
 import { ErrorMessage, Field, Formik } from "formik";
 import { useState } from "react";
 import { Form } from "formik";
-import { schemaCatgory } from "@validations";
+import * as Yup from "yup";
 
 export function CreateBrandModal() {
   const [openModal, setOpenModal] = useState(false);
-  const { data } = useBrandStore();
+  const [imgPreview, setImgPreview] = useState<string | null>(null);
+  const { data, getAll } = useCategoryStore();
+  const { create } = useBrandStore();
 
   function onCloseModal() {
     setOpenModal(false);
+    setImgPreview(null); // Reset the image preview when closing the modal
   }
 
   const initialValues: CreateBrand = {
@@ -23,12 +26,35 @@ export function CreateBrandModal() {
   };
 
   const handleSubmit = async (values: CreateBrand) => {
-    console.log(values);
+    const payload = { ...values, category_id: parseInt(values.category_id) };
+    try {
+      const res = await create(payload);
+      console.log(res);
+      // Add your logic here to handle the response
+    } catch (error) {
+      console.error(error);
+      // Handle the error here
+    }
   };
+
+  // Validation schema for the brand form
+  const schemaBrand = Yup.object().shape({
+    name: Yup.string().required("Brand name is required"),
+    description: Yup.string().required("Description is required"),
+    category_id: Yup.number().required("Category is required"),
+    file: Yup.mixed().required("Brand file is required"),
+  });
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Create Brand</Button>
+      <Button
+        onClick={() => {
+          getAll({ limit: 1000, page: 1, search: "" });
+          setOpenModal(true);
+        }}
+      >
+        Create Brand
+      </Button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
@@ -38,55 +64,99 @@ export function CreateBrandModal() {
             </h3>
             <Formik
               initialValues={initialValues}
-              validationSchema={schemaCatgory}
+              validationSchema={schemaBrand}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, setFieldValue }) => (
                 <Form className="grid gap-2">
-                  <Field
-                    name="name"
-                    as={TextInput}
-                    placeholder="Brand Name"
-                    helperText={
-                      <ErrorMessage
-                        name="name"
-                        component="small"
-                        className="text-[red]"
+                  <Field name="name">
+                    {({ field }: { field: any }) => (
+                      <TextInput
+                        {...field}
+                        placeholder="Brand Name"
+                        helperText={
+                          <ErrorMessage
+                            name="name"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
                       />
-                    }
-                  />
-                  <Field
-                    name="description"
-                    as={TextInput}
-                    placeholder="Description"
-                    helperText={
-                      <ErrorMessage
-                        name="description"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  />
-                  <Field
-                    name="category_id"
-                    type="number"
-                    as={Select}
-                    placeholder="Category ID"
-                    helperText={
-                      <ErrorMessage
-                        name="category_id"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  >
-                    {data.map((item, _) => (
-                      <option key={_} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
+                    )}
                   </Field>
+                  <Field name="description">
+                    {({ field }: { field: any }) => (
+                      <TextInput
+                        {...field}
+                        placeholder="Description"
+                        helperText={
+                          <ErrorMessage
+                            name="description"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
+                      />
+                    )}
+                  </Field>
+                  <Field name="category_id">
+                    {({ field }: { field: any }) => (
+                      <Select
+                        {...field}
+                        placeholder="Select Category"
+                        helperText={
+                          <ErrorMessage
+                            name="category_id"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
+                      >
+                        <option value="" disabled>
+                          Select Category
+                        </option>
+                        {data.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  </Field>
+                  <Field name="file">
+                    {({ form }: { form: any }) => (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => {
+                            if (
+                              event.currentTarget.files &&
+                              event.currentTarget.files[0]
+                            ) {
+                              const file = event.currentTarget.files[0];
+                              setFieldValue("file", file);
 
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setImgPreview(reader.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                        {imgPreview && (
+                          <div className="w-full flex justify-center my-3">
+                            <img
+                              src={imgPreview}
+                              className="w-[120px] mt-[10px]"
+                              alt="Preview"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </Field>
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>

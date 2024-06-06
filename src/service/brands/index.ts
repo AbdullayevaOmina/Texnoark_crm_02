@@ -4,7 +4,9 @@ export const brands: Request = {
   create: (data) => request.post(`/brand`, data),
   get: (id) => request.get(`/brand/${id}`),
   getAll: (params) =>
-    request.get(`/brand?limit=${params.limit}&page=${params.page}`),
+    request.get(
+      `/brand/search?search=${params.search}&limit=${params.limit}&page=${params.page}`
+    ),
   update: (data) => request.patch(`/brand/${data.id}`, data.data),
-  delete: (id) => request.delete(`/brand/${id}`),
+  deleteBrand: (id) => request.delete(`/brand/${id}`),
 };

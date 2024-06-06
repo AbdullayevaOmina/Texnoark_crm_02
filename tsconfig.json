@@ -40,6 +40,7 @@
       "@auth-interface": ["./src/interfaces/auth/register.ts"],
       "@category-interface": ["./src/interfaces/category.ts"],
       "@brands-interface": ["./src/interfaces/brands.ts"],
+      "@products-interface": ["./src/interfaces/products.ts"],
 
       // --------------------------------------------------------
       "@validations": ["./src/validations"],

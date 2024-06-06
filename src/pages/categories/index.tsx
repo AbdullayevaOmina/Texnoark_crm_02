@@ -7,26 +7,46 @@ import {
   DeleteCategoryModal,
   UpdateCategoryModal,
 } from "@modals";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { TableSkeleton } from "@ui";
 
 const TableHeader = [{ key: "name", value: "Category Name" }];
 
 const Index = () => {
-  const { data, isLoading, getAll } = useCategoryStore();
-  // const location = useLocation();
-  const [params, setParams] = useState({ page: 1, limit: 10, search: "" });
+  const { data, isLoading, getAll, totalCount } = useCategoryStore();
+  const location = useLocation();
+  const [search, setSearch] = useState("");
+  const [params, setParams] = useState({ page: 1, limit: 10, search: search });
 
   useEffect(() => {
     getAll(params);
-  }, [params]);
+  }, [params, search]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const onPageChange = (page: number) => setCurrentPage(page);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+    const pageNumber = page ? parseInt(page) : 1;
+    const search = params.get("search") || "";
+    setSearch(search);
+    setParams((prevParams) => ({
+      ...prevParams,
+      page: pageNumber,
+      search: search,
+    }));
+  }, [location.search]);
+
+  const changePage = (value: number) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      page: value,
+    }));
+  };
 
   return (
     <div className="p-4 md:pl-[275px] w-full h-auto pt-20">
-      <div className="flex justify-end mb-3">{<CreateCategoryModal />}</div>
+      <div className="flex justify-end mb-3">
+        <CreateCategoryModal />
+      </div>
       <div className="overflow-x-auto w-full">
         <Table hoverable>
           <Table.Head>
@@ -58,11 +78,13 @@ const Index = () => {
             )}
           </Table.Body>
         </Table>
+        {totalCount > 1 && (
           <Pagination
-            currentPage={currentPage}
-            totalPages={2}
-            onPageChange={onPageChange}
+            currentPage={params.page}
+            totalPages={totalCount}
+            onPageChange={changePage}
           />
+        )}
       </div>
     </div>
   );

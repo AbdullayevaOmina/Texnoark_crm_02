@@ -1,18 +1,19 @@
 import { create } from "zustand";
-import { CategoryStore, CreateCategory } from "@category-interface";
-import { categories } from "@service";
+import { ProductStore } from "@products-interface";
+import { products } from "@service";
 import { toast } from "react-toastify";
 
-const useCategoryStore = create<CategoryStore>((set, get) => ({
+const useProductsStore = create<ProductStore>((set, get) => ({
   data: [],
   isLoading: false,
   totalCount: 1,
-  create: async (reqdata: CreateCategory) => {
+
+  create: async (reqdata) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.create(reqdata);
+      const response: any = await products.create(reqdata);
       if (response.status === 201) {
-        toast.success("Category created successfully");
+        toast.success("product created successfully");
         console.log(response);
         const currentData = get().data;
         console.log(currentData);
@@ -20,8 +21,8 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
       }
       return response.status;
     } catch (error) {
-      console.error("Create category error:", error);
-      toast.error("Failed to create category");
+      console.error("Create product error:", error);
+      toast.error("Failed to create product");
       return null;
     } finally {
       set({ isLoading: false });
@@ -31,20 +32,19 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   update: async (data) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.update(data);
-      console.log(response);
+      const response: any = await products.update(data);
       if (response.status === 200) {
-        toast.success("Category updated successfully");
+        toast.success("product updated successfully");
         const currentData = get().data;
         const updatedData = currentData.map((item) =>
-          item.id === data.id ? response.data.data : item
+          item.id === data.id ? response.data.product : item
         );
         set({ data: updatedData });
       }
       return response.status;
     } catch (error) {
-      console.error("Update category error:", error);
-      toast.error("Failed to update category");
+      console.error("Update product error:", error);
+      toast.error("Failed to update product");
       return null;
     } finally {
       set({ isLoading: false });
@@ -54,13 +54,14 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   get: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.get(id);
+      const response: any = await products.get(id);
+      console.log(response);
       if (response.status === 200) {
-        return response.data.data;
+        return response.data;
       }
     } catch (error) {
-      console.error("Get category error:", error);
-      toast.error("Failed to fetch category");
+      console.error("Get product error:", error);
+      toast.error("Failed to fetch product");
     } finally {
       set({ isLoading: false });
     }
@@ -70,35 +71,37 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   getAll: async (params) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.getAll(params);
+      const response: any = await products.getAll(params);
+      console.log(response);
       if (response.status === 200) {
         set({
-          data: response.data.data.categories,
+          data: response.data.data.products,
           totalCount: Math.ceil(response.data.data.count / params.limit),
         });
       }
+      return response.status;
     } catch (error) {
-      console.error("Fetch categories error:", error);
-      toast.error("Failed to fetch categories");
+      console.error("Fetch products error:", error);
+      toast.error("Failed to fetch products");
     } finally {
       set({ isLoading: false });
     }
   },
 
-  deleteCategory: async (id) => {
+  deleteProduct: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.deleteCategory(id);
+      const response: any = await products.deleteProduct(id);
       if (response.status === 200) {
-        toast.success("Category deleted successfully");
+        toast.success("product deleted successfully");
         const currentData = get().data;
         const updatedData = currentData.filter((item) => item.id !== id);
         set({ data: updatedData });
       }
       return response.status;
     } catch (error) {
-      console.error("Delete category error:", error);
-      toast.error("Failed to delete category");
+      console.error("Delete product error:", error);
+      toast.error("Failed to delete product");
       return null;
     } finally {
       set({ isLoading: false });
@@ -106,4 +109,4 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   },
 }));
 
-export default useCategoryStore;
+export default useProductsStore;

@@ -29,7 +29,13 @@ export function UpdateBrandModal() {
 
   return (
     <>
-      <button onClick={() => setOpenModal(true)}>{editIcon}</button>
+      <button
+        onClick={() => setOpenModal(true)}
+        className="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-sky-400 rounded-lg hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800"
+      >
+        {editIcon}
+        Edit
+      </button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
@@ -92,10 +98,10 @@ export function UpdateBrandModal() {
                     {isSubmitting ? (
                       <>
                         <Spinner aria-label="Submitting" size="md" />{" "}
-                        Creating...
+                        ...Updating
                       </>
                     ) : (
-                      "Create"
+                      "Update"
                     )}
                   </Button>
                 </Form>

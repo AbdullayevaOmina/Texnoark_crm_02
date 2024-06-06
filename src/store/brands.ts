@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 const usebrandsStore = create<BrandStore>((set, get) => ({
   data: [],
   isLoading: false,
+  totalCount: 1,
 
   create: async (reqdata) => {
     set({ isLoading: true });
@@ -73,6 +74,13 @@ const usebrandsStore = create<BrandStore>((set, get) => ({
     try {
       const response: any = await brands.getAll(params);
       console.log(response);
+      if (response.status === 200) {
+        set({
+          data: response.data.data.brands,
+          totalCount: Math.ceil(response.data.data.count / params.limit),
+        });
+      }
+      return response.status;
     } catch (error) {
       console.error("Fetch brands error:", error);
       toast.error("Failed to fetch brands");

@@ -40,5 +40,5 @@ export const schemaBrand = Yup.object().shape({
   parent_category_id: Yup.number().required("Parent Brand is required"),
   description: Yup.string().required("Description is required"),
   category_id: Yup.number().required("Parent Brand is required"),
-  file: Yup.string().required("Brand file is required"),
+  file: Yup.mixed().required("Brand file is required"),
 });

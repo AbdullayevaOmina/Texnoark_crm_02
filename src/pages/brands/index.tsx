@@ -1,20 +1,43 @@
 import { useBrandStore } from "@store";
-import { editIcon } from "@global-icons";
 import { CreateBrandModal, DeleteBrandModal, UpdateBrandModal } from "@modals";
-import { Table } from "flowbite-react";
-import { useEffect } from "react";
+import { Pagination, Table } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const TableHeader = [
-  { key: "file", value: "Img" },
   { key: "name", value: "Category Name" },
   { key: "description", value: "description" },
 ];
 
 const index = () => {
-  const { data, isLoading, getAll, update, deleteBrand } = useBrandStore();
+  const { data, isLoading, getAll, totalCount } = useBrandStore();
+  const location = useLocation();
+  const [search, setSearch] = useState("");
+  const [params, setParams] = useState({ page: 1, limit: 10, search: search });
+
   useEffect(() => {
-    getAll({ page: 1, limit: 10 });
-  }, [update, deleteBrand]);
+    getAll(params);
+  }, [params, search]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+    const pageNumber = page ? parseInt(page) : 1;
+    const search = params.get("search") || "";
+    setSearch(search);
+    setParams((prevParams) => ({
+      ...prevParams,
+      page: pageNumber,
+      search: search,
+    }));
+  }, [location.search]);
+
+  const changePage = (value: number) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      page: value,
+    }));
+  };
 
   return (
     <div className="p-4 md:pl-[275px] w-ful h-auto pt-20">
@@ -41,14 +64,21 @@ const index = () => {
                   {TableHeader.map((header, cellIndex) => (
                     <Table.Cell key={cellIndex}>{row[header.key]}</Table.Cell>
                   ))}
-                  <Table.Cell className=" flex gap-3">
-                    <button className="">{editIcon}</button>
+                  <Table.Cell className="flex gap-3">
+                    <UpdateBrandModal />
                     <DeleteBrandModal id={row.id} />
                   </Table.Cell>
                 </Table.Row>
               ))}
           </Table.Body>
         </Table>
+        {totalCount > 1 && (
+          <Pagination
+            currentPage={params.page}
+            totalPages={totalCount}
+            onPageChange={changePage}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,15 +1,10 @@
-import {
-  BellIcon,
-  CloseIcon,
-  MenuIcon,
-  SearchIcon,
-  SearchIcon2,
-} from "@drawer-icons";
+import { BellIcon, CloseIcon, MenuIcon, SearchIcon2 } from "@drawer-icons";
 import avatar from "../../assets/avatar.png";
 import { getDataFromCookie, removeDataFromCookie } from "@cookie";
 import { useNavigate } from "react-router-dom";
-import Logo2 from "../../assets/logo2.png";
+import Logo2 from "../../assets/logo3.png";
 import { eyeIcon } from "@global-icons";
+import { GlobalSearch } from "@ui";
 // import { useRegisterStore } from "@store";
 
 const index = () => {
@@ -64,22 +59,8 @@ const index = () => {
               </span>
             </a>
 
-            <form action="#" method="GET" className="hidden md:block md:pl-2">
-              <label htmlFor="topbar-search" className="sr-only">
-                Search
-              </label>
-              <div className="relative md:ml-10 md:w-72 lg:w-[400px] xl:w-[500px]">
-                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  {SearchIcon}
-                </div>
-                <input
-                  name="search"
-                  id="topbar-search"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Search"
-                />
-              </div>
-            </form>
+            {/* Search */}
+            <GlobalSearch />
           </div>
 
           <div className="flex items-center lg:order-2">
