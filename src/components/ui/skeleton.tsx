@@ -73,3 +73,15 @@ export const ProductsPageSkeleton = () => {
     </>
   );
 };
+
+export const TableSkeleton = () => {
+  return (
+    <>
+      <div role="status" className="w-full animate-pulse ">
+        <div className="h-10 bg-gray-200 rounded-md dark:bg-gray-700 w-full my-4" />
+        <div className="h-10 bg-gray-200 rounded-md dark:bg-gray-700 w-full my-4" />
+        <div className="h-10 bg-gray-200 rounded-md dark:bg-gray-700 w-full my-4" />
+      </div>
+    </>
+  );
+};

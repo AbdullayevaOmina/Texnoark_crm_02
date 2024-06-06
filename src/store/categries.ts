@@ -32,11 +32,12 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
     set({ isLoading: true });
     try {
       const response: any = await categories.update(data);
+      console.log(response);
       if (response.status === 200) {
         toast.success("Category updated successfully");
         const currentData = get().data;
         const updatedData = currentData.map((item) =>
-          item.id === data.id ? response.data.category : item
+          item.id === data.id ? response.data.data : item
         );
         set({ data: updatedData });
       }
@@ -55,7 +56,7 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
     try {
       const response: any = await categories.get(id);
       if (response.status === 200) {
-        return response.data.category;
+        return response.data.data;
       }
     } catch (error) {
       console.error("Get category error:", error);

@@ -12,11 +12,7 @@ const useRegisterStore = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const response: any = await auth.signin(data);
-      console.log(response);
-
       if (response.status === 200) {
-        console.log(response);
-
         set({ data: response.data.admin });
         setDataToCookie("access_token", response.data.data.token);
         setDataToCookie("last_name", response.data.data.admin.last_name);

@@ -21,8 +21,6 @@ export default function SignIn() {
   };
 
   const handleSubmit = async (values: Signin) => {
-    console.log(values);
-
     const phNumber = values.phone_number.replace(/\D/g, "");
     const payload = { ...values, phone_number: `+${phNumber}` };
     const status = await signin(payload);

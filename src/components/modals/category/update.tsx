@@ -1,37 +1,22 @@
 "use client";
 import { useCategoryStore } from "@store";
 import { CreateCategory } from "@category-interface";
-import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
+import { Button, Modal, Spinner, TextInput } from "flowbite-react";
 import { ErrorMessage, Field, Formik } from "formik";
 import { useState } from "react";
 import { Form } from "formik";
 import { schemaCatgory } from "@validations";
 import { editIcon } from "@global-icons";
 
-export function UpdateCategoryModal() {
+export function UpdateCategoryModal({ category }: any) {
   const [openModal, setOpenModal] = useState(false);
-  const { data, create } = useCategoryStore();
-
-  function onCloseModal() {
-    setOpenModal(false);
-  }
-
-  const initialValues: CreateCategory = {
-    name: "",
-    parent_category_id: null,
-  };
+  const { update } = useCategoryStore();
 
   const handleSubmit = async (values: CreateCategory) => {
-    console.log(values);
-    const id = parseInt(values.parent_category_id);
-    const payload = {
-      ...values,
-      parent_category_id: id,
-    };
-    console.log(payload);
-
-    const status = await create(payload);
-    if (status === 201) {
+    const data = { id: category.id, data: { name: values.name } };
+    const status = await update(data);
+    if (status === 200) {
+      // Status for a successful update is typically 200
       console.log(status);
       setOpenModal(false);
     }
@@ -40,7 +25,12 @@ export function UpdateCategoryModal() {
   return (
     <>
       <button onClick={() => setOpenModal(true)}>{editIcon}</button>
-      <Modal show={openModal} size="md" onClose={onCloseModal} popup>
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6">
@@ -48,7 +38,9 @@ export function UpdateCategoryModal() {
               Update Category
             </h3>
             <Formik
-              initialValues={initialValues}
+              initialValues={{
+                name: category.name,
+              }}
               validationSchema={schemaCatgory}
               onSubmit={handleSubmit}
             >
@@ -66,26 +58,6 @@ export function UpdateCategoryModal() {
                       />
                     }
                   />
-                  <Field
-                    name="parent_category_id"
-                    type="number"
-                    as={Select}
-                    placeholder="Parent Category ID"
-                    helperText={
-                      <ErrorMessage
-                        name="parent_category_id"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  >
-                    {data.map((item, _) => (
-                      <option key={_} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Field>
-
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>

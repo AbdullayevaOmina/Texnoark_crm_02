@@ -11,8 +11,6 @@ export function DeleteCategoryModal({ id }: any) {
 
   const handleDelete = async (e: any) => {
     e.preventDefault();
-    console.log(id);
-
     try {
       const responseStatus = await deleteCategory(id);
       if (responseStatus === 200) {

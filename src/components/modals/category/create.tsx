@@ -15,10 +15,6 @@ export function CreateCategoryModal() {
     setOpenModal(false);
   }
 
-  const initialValues: CreateCategory = {
-    name: "",
-  };
-
   const handleSubmit = async (values: CreateCategory) => {
     const status = await create(values);
     if (status === 201) {
@@ -37,7 +33,9 @@ export function CreateCategoryModal() {
               Create Category
             </h3>
             <Formik
-              initialValues={initialValues}
+              initialValues={{
+                name: "",
+              }}
               validationSchema={schemaCatgory}
               onSubmit={handleSubmit}
             >
