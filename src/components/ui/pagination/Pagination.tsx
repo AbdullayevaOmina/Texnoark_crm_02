@@ -1,20 +1,28 @@
 "use client";
-
 import { Pagination } from "flowbite-react";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+interface PaginationProps {
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (value: number) => void;
+}
 
-export function Component() {
-  const [currentPage, setCurrentPage] = useState(1);
+export function GlobalPagination(props: PaginationProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const onPageChange = (page: number) => setCurrentPage(page);
+  const handleChange = (value: number) => {
+    props.onPageChange(value);
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", `${value}`);
+    navigate(`?${searchParams}`);
+  };
 
   return (
-    <div className="flex overflow-x-auto sm:justify-center">
-      <Pagination
-        currentPage={currentPage}
-        totalPages={100}
-        onPageChange={onPageChange}
-      />
-    </div>
+    <Pagination
+      currentPage={props.currentPage}
+      totalPages={props.totalPages}
+      onPageChange={handleChange}
+    />
   );
 }

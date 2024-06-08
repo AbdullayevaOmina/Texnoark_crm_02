@@ -1,23 +1,22 @@
 import { create } from "zustand";
-import { CategoryStore, CreateCategory } from "@category-interface";
+import { SubCategoryStore } from "@category-interface";
 import { categories } from "@service";
 import { toast } from "react-toastify";
 
-const useCategoryStore = create<CategoryStore>((set, get) => ({
-  data: [],
+const useCategoryStore = create<SubCategoryStore>((set, get) => ({
   subData: [],
   isLoading: false,
   totalCount: 1,
-  create: async (reqdata: CreateCategory) => {
+  create: async (reqdata) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.create(reqdata);
+      const response: any = await categories.create_sub(reqdata);
       if (response.status === 201) {
-        toast.success("Category created successfully");
+        toast.success("Sub Category created successfully");
         console.log(response);
-        const currentData = get().data;
+        const currentData = get().subData;
         console.log(currentData);
-        set({ data: [...currentData, response.data.data] });
+        set({ subData: [...currentData, response.data.data] });
       }
       return response.status;
     } catch (error) {
@@ -32,15 +31,15 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   update: async (data) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.update(data);
+      const response: any = await categories.update_sub(data);
       console.log(response);
       if (response.status === 200) {
         toast.success("Category updated successfully");
-        const currentData = get().data;
+        const currentData = get().subData;
         const updatedData = currentData.map((item) =>
           item.id === data.id ? response.data.data : item
         );
-        set({ data: updatedData });
+        set({ subData: updatedData });
       }
       return response.status;
     } catch (error) {
@@ -55,7 +54,7 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   get: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.get(id);
+      const response: any = await categories.get_sub(id);
       if (response.status === 200) {
         return response.data.data;
       }
@@ -69,24 +68,6 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
   },
 
   getAll: async (params) => {
-    set({ isLoading: true });
-    try {
-      const response: any = await categories.getAll(params);
-      if (response.status === 200) {
-        set({
-          data: response.data.data.categories,
-          totalCount: Math.ceil(response.data.data.count / params.limit),
-        });
-      }
-    } catch (error) {
-      console.error("Fetch categories error:", error);
-      toast.error("Failed to fetch categories");
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-
-  getAllSubCategory: async (params) => {
     set({ isLoading: true });
     try {
       const response: any = await categories.getAllSubCategory(params);
@@ -106,19 +87,19 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
-  deleteCategory: async (id) => {
+  deleteSubCategory: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await categories.deleteCategory(id);
+      const response: any = await categories.deleteCategory_sub(id);
       if (response.status === 200) {
-        toast.success("Category deleted successfully");
-        const currentData = get().data;
+        toast.success("Category Sub deleted successfully");
+        const currentData = get().subData;
         const updatedData = currentData.filter((item) => item.id !== id);
-        set({ data: updatedData, isLoading: false });
+        set({ subData: updatedData, isLoading: false });
       }
       return response.status;
     } catch (error) {
-      console.error("Delete category error:", error);
+      console.error("Delete Sub category error:", error);
       toast.error("Failed to delete category");
       return null;
     } finally {

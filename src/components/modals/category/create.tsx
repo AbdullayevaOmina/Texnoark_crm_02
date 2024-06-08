@@ -48,7 +48,7 @@ export function CreateCategoryModal() {
                     helperText={
                       <ErrorMessage
                         name="name"
-                        component="small"
+                        component="span"
                         className="text-[red]"
                       />
                     }

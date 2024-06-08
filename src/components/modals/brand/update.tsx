@@ -1,40 +1,71 @@
 "use client";
-import { useBrandStore } from "@store";
+import { useCategoryStore, useBrandStore } from "@store";
 import { CreateBrand } from "@brands-interface";
 import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
-import { ErrorMessage, Field, Formik } from "formik";
-import { useState } from "react";
-import { Form } from "formik";
-import { schemaCatgory } from "@validations";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import { useState, useEffect } from "react";
+import { schemaBrand } from "@validations";
 import { editIcon } from "@global-icons";
 
-export function UpdateBrandModal() {
+export function UpdateBrandModal({ brand }: any) {
+  console.log(brand);
+
   const [openModal, setOpenModal] = useState(false);
-  const { data } = useBrandStore();
+  const [imgPreview, setImgPreview] = useState<string | null>(null);
+  const { data, getAll } = useCategoryStore();
+  const { update } = useBrandStore();
 
   function onCloseModal() {
     setOpenModal(false);
+    setImgPreview(null);
   }
 
+  useEffect(() => {
+    if (openModal) {
+      getAll({ limit: 1000, page: 1, search: "" });
+    }
+  }, [openModal, getAll]);
+
   const initialValues: CreateBrand = {
-    name: "",
-    description: "",
+    name: brand.name,
+    description: brand.description,
     category_id: null,
     file: undefined,
   };
 
-  const handleSubmit = async (values: CreateBrand) => {
-    console.log(values);
+  const handleSubmit = async (
+    values: CreateBrand,
+    { setSubmitting }: FormikHelpers<CreateBrand>
+  ) => {
+    try {
+      const formData: any = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("category_id", values.category_id);
+      if (values.file) {
+        formData.append("file", values.file);
+      }
+
+      const payload = { id: brand.id, data: formData };
+      const res = await update(payload);
+      console.log(res);
+      // Add your logic here to handle the response
+      setOpenModal(false);
+    } catch (error) {
+      console.error(error);
+      // Handle the error here
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <>
       <button
+        className="hover:text-yellow-300"
         onClick={() => setOpenModal(true)}
-        className="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-sky-400 rounded-lg hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800"
       >
         {editIcon}
-        Edit
       </button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
@@ -45,60 +76,103 @@ export function UpdateBrandModal() {
             </h3>
             <Formik
               initialValues={initialValues}
-              validationSchema={schemaCatgory}
+              validationSchema={schemaBrand}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, setFieldValue }) => (
                 <Form className="grid gap-2">
-                  <Field
-                    name="name"
-                    as={TextInput}
-                    placeholder="Brand Name"
-                    helperText={
-                      <ErrorMessage
-                        name="name"
-                        component="small"
-                        className="text-[red]"
+                  <Field name="name">
+                    {({ field }: { field: any }) => (
+                      <TextInput
+                        {...field}
+                        placeholder="Brand Name"
+                        helperText={
+                          <ErrorMessage
+                            name="name"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
                       />
-                    }
-                  />
-                  <Field
-                    name="description"
-                    as={TextInput}
-                    placeholder="Description"
-                    helperText={
-                      <ErrorMessage
-                        name="description"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  />
-                  <Field
-                    name="category_id"
-                    type="number"
-                    as={Select}
-                    placeholder="Category ID"
-                    helperText={
-                      <ErrorMessage
-                        name="category_id"
-                        component="small"
-                        className="text-[red]"
-                      />
-                    }
-                  >
-                    {data.map((item, _) => (
-                      <option key={_} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
+                    )}
                   </Field>
+                  <Field name="description">
+                    {({ field }: { field: any }) => (
+                      <TextInput
+                        {...field}
+                        placeholder="Description"
+                        helperText={
+                          <ErrorMessage
+                            name="description"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
+                      />
+                    )}
+                  </Field>
+                  <Field name="category_id">
+                    {({ field }: { field: any }) => (
+                      <Select
+                        {...field}
+                        placeholder="Select Category"
+                        helperText={
+                          <ErrorMessage
+                            name="category_id"
+                            component="small"
+                            className="text-[red]"
+                          />
+                        }
+                      >
+                        <option disabled>Select Category</option>
+                        {data.map((item) => (
+                          <option
+                            selected={item.id === brand.category_id}
+                            key={item.id}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  </Field>
+                  <Field name="file">
+                    {({ field }: { field: any }) => (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => {
+                            if (
+                              event.currentTarget.files &&
+                              event.currentTarget.files[0]
+                            ) {
+                              const file = event.currentTarget.files[0];
+                              setFieldValue("file", file);
 
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setImgPreview(reader.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                        <div className="w-full flex justify-center my-3">
+                          <img
+                            src={imgPreview ? imgPreview : brand.image}
+                            className="w-[120px] mt-[10px]"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </Field>
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <Spinner aria-label="Submitting" size="md" />{" "}
-                        ...Updating
+                        Updating...
                       </>
                     ) : (
                       "Update"

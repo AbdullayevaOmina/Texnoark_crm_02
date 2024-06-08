@@ -34,11 +34,10 @@ export const schemaCatgory = Yup.object().shape({
   name: Yup.string().required("Category name is required"),
 });
 
-// ---------------------- Brand ----------------------
+// Validation schema for the brand form
 export const schemaBrand = Yup.object().shape({
   name: Yup.string().required("Brand name is required"),
-  parent_category_id: Yup.number().required("Parent Brand is required"),
   description: Yup.string().required("Description is required"),
-  category_id: Yup.number().required("Parent Brand is required"),
+  category_id: Yup.number().required("Category is required"),
   file: Yup.mixed().required("Brand file is required"),
 });

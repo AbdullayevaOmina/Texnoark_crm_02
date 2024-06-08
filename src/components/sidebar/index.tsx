@@ -2,7 +2,6 @@ import { SettingsIcon, MessagesIcon } from "@drawer-icons";
 import router from "@routes";
 import { DarkModeButton } from "@dark-mode";
 import { Link, useLocation } from "react-router-dom";
-import { searchIconMD } from "@global-icons";
 
 export default function Sidebar() {
   const location = useLocation();

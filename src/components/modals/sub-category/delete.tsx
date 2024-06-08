@@ -1,20 +1,18 @@
 "use client";
-import { useBrandStore } from "@store";
+import { useSubCategoryStore } from "@store";
 import { deleteIcon } from "@global-icons";
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-export function DeleteBrandModal({ id }: any) {
+export function DeleteSubCategoryModal({ id }: any) {
   const [openModal, setOpenModal] = useState(false);
-  const { deleteBrand } = useBrandStore();
+  const { deleteSubCategory } = useSubCategoryStore();
 
   const handleDelete = async (e: any) => {
     e.preventDefault();
-    console.log(id);
-
     try {
-      const responseStatus = await deleteBrand(id);
+      const responseStatus = await deleteSubCategory(id);
       if (responseStatus === 200) {
         setOpenModal(false);
       }
@@ -39,7 +37,7 @@ export function DeleteBrandModal({ id }: any) {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this brand?
+              Are you sure you want to delete this sub category?
             </h3>
             <div className="flex justify-center gap-4">
               <Button color="failure" onClick={handleDelete}>

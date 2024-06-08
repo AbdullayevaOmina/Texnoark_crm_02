@@ -3,7 +3,7 @@
 export interface CreateBrand {
   name: string;
   description: string;
-  category_id: number | null;
+  category_id: number | undefined | null;
   file: string | undefined;
 }
 // PUT

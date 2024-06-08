@@ -1,7 +1,7 @@
 import { BellIcon, CloseIcon, MenuIcon, SearchIcon2 } from "@drawer-icons";
 import avatar from "../../assets/avatar.png";
 import { getDataFromCookie, removeDataFromCookie } from "@cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/logo3.png";
 import { eyeIcon } from "@global-icons";
 import { GlobalSearch } from "@ui";
@@ -270,12 +270,12 @@ const index = () => {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
                     className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                    to={"settings"}
                   >
                     Account settings
-                  </a>
+                  </Link>
                 </li>
               </ul>
               <ul

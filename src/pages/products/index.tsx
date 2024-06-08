@@ -6,7 +6,7 @@ import { Ask } from "@modals";
 
 const Products = () => {
   return (
-    <div className="md:pl-[255px] pt-14">
+    <div className="md:pl-[255px] pt-14 h-[100vh]">
       {/* <!-- Start block --> */}
       <Start />
 

@@ -2,10 +2,9 @@
 import { useCategoryStore, useBrandStore } from "@store";
 import { CreateBrand } from "@brands-interface";
 import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
-import { ErrorMessage, Field, Formik } from "formik";
-import { useState } from "react";
-import { Form } from "formik";
-import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import { useState, useEffect } from "react";
+import { schemaBrand } from "@validations";
 
 export function CreateBrandModal() {
   const [openModal, setOpenModal] = useState(false);
@@ -15,8 +14,14 @@ export function CreateBrandModal() {
 
   function onCloseModal() {
     setOpenModal(false);
-    setImgPreview(null); // Reset the image preview when closing the modal
+    setImgPreview(null);
   }
+
+  useEffect(() => {
+    if (openModal) {
+      getAll({ limit: 1000, page: 1, search: "" });
+    }
+  }, [openModal, getAll]);
 
   const initialValues: CreateBrand = {
     name: "",
@@ -25,36 +30,34 @@ export function CreateBrandModal() {
     file: undefined,
   };
 
-  const handleSubmit = async (values: CreateBrand) => {
-    const payload = { ...values, category_id: parseInt(values.category_id) };
+  const handleSubmit = async (
+    values: CreateBrand,
+    { setSubmitting }: FormikHelpers<CreateBrand>
+  ) => {
     try {
-      const res = await create(payload);
+      const formData: any = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("category_id", values.category_id);
+      if (values.file) {
+        formData.append("file", values.file);
+      }
+
+      const res = await create(formData);
       console.log(res);
       // Add your logic here to handle the response
+      setOpenModal(false);
     } catch (error) {
       console.error(error);
       // Handle the error here
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  // Validation schema for the brand form
-  const schemaBrand = Yup.object().shape({
-    name: Yup.string().required("Brand name is required"),
-    description: Yup.string().required("Description is required"),
-    category_id: Yup.number().required("Category is required"),
-    file: Yup.mixed().required("Brand file is required"),
-  });
-
   return (
     <>
-      <Button
-        onClick={() => {
-          getAll({ limit: 1000, page: 1, search: "" });
-          setOpenModal(true);
-        }}
-      >
-        Create Brand
-      </Button>
+      <Button onClick={() => setOpenModal(true)}>Create Brand</Button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
@@ -112,7 +115,7 @@ export function CreateBrandModal() {
                           />
                         }
                       >
-                        <option value="" disabled>
+                        <option selected disabled>
                           Select Category
                         </option>
                         {data.map((item) => (
@@ -124,7 +127,7 @@ export function CreateBrandModal() {
                     )}
                   </Field>
                   <Field name="file">
-                    {({ form }: { form: any }) => (
+                    {({ field }: { field: any }) => (
                       <div>
                         <input
                           type="file"

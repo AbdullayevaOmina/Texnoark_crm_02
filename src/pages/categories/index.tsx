@@ -1,26 +1,30 @@
 "use client";
-import { Pagination, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import { useCategoryStore } from "@store";
 import { useEffect, useState } from "react";
 import {
   CreateCategoryModal,
+  CreateSubCategoryModal,
   DeleteCategoryModal,
   UpdateCategoryModal,
 } from "@modals";
-import { useLocation } from "react-router-dom";
-import { TableSkeleton } from "@ui";
+import { useLocation, useNavigate } from "react-router-dom";
+import { GlobalPagination, TableSkeleton } from "@ui";
+import { eyeIcon } from "@global-icons";
+import { setDataToCookie } from "@cookie";
 
 const TableHeader = [{ key: "name", value: "Category Name" }];
 
 const Index = () => {
   const { data, isLoading, getAll, totalCount } = useCategoryStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [params, setParams] = useState({ page: 1, limit: 10, search: search });
 
   useEffect(() => {
     getAll(params);
-  }, [params, search]);
+  }, [search]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -43,7 +47,7 @@ const Index = () => {
   };
 
   return (
-    <div className="p-4 md:pl-[275px] w-full h-auto pt-20">
+    <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
       <div className="flex justify-end mb-3">
         <CreateCategoryModal />
       </div>
@@ -53,9 +57,7 @@ const Index = () => {
             {TableHeader.map((item, index) => (
               <Table.HeadCell key={index}>{item.value}</Table.HeadCell>
             ))}
-            <Table.HeadCell>
-              <span className="sr-only">Edit</span>
-            </Table.HeadCell>
+            <Table.HeadCell />
           </Table.Head>
           <Table.Body className="divide-y">
             {!isLoading ? (
@@ -68,6 +70,20 @@ const Index = () => {
                     <Table.Cell key={cellIndex}>{row[header.key]}</Table.Cell>
                   ))}
                   <Table.Cell className="flex gap-3">
+                    <button
+                      onClick={() => {
+                        setDataToCookie("parent_category_id", row.id);
+                        navigate(`category=${row.id}`);
+                        window.location.reload();
+                      }}
+                      className="hover:text-blue-700"
+                    >
+                      {eyeIcon}
+                    </button>
+                    <CreateSubCategoryModal
+                      parent_category_id={row.id}
+                      buttonTip={false}
+                    />
                     <UpdateCategoryModal category={row} />
                     <DeleteCategoryModal id={row.id} />
                   </Table.Cell>
@@ -79,9 +95,9 @@ const Index = () => {
           </Table.Body>
         </Table>
         {totalCount > 1 && (
-          <Pagination
-            currentPage={params.page}
+          <GlobalPagination
             totalPages={totalCount}
+            currentPage={params.page}
             onPageChange={changePage}
           />
         )}
