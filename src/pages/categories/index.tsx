@@ -24,7 +24,7 @@ const Index = () => {
 
   useEffect(() => {
     getAll(params);
-  }, [search]);
+  }, [params, search]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -45,7 +45,6 @@ const Index = () => {
       page: value,
     }));
   };
-
   return (
     <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
       <div className="flex justify-end mb-3">
@@ -96,8 +95,8 @@ const Index = () => {
         </Table>
         {totalCount > 1 && (
           <GlobalPagination
-            totalPages={totalCount}
             currentPage={params.page}
+            totalPages={totalCount}
             onPageChange={changePage}
           />
         )}

@@ -13,6 +13,16 @@ const router = [
     icon: OwerviewIcon,
   },
   {
+    path: "/main/categories",
+    content: "Categories",
+    icon: CatgoryIcon,
+  },
+  {
+    path: "/main/brands",
+    content: "Brands",
+    icon: BrandsIcon,
+  },
+  {
     path: "/main/products",
     content: "Products",
     icon: ProductsIcon,
@@ -21,16 +31,6 @@ const router = [
     path: "/main/models",
     content: "Models",
     icon: ModelsIcon,
-  },
-  {
-    path: "/main/brands",
-    content: "Brands",
-    icon: BrandsIcon,
-  },
-  {
-    path: "/main/categories",
-    content: "Categories",
-    icon: CatgoryIcon,
   },
 ];
 

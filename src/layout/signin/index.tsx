@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRegisterStore } from "@store";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import frame1 from "../../assets/img.png";
-import Logo from "../../assets/logo2.png";
+import Logo from "../../assets/logo3.png";
 import "./style.css";
 import { MaskedInput } from "@ui";
 
@@ -33,7 +33,7 @@ export default function SignIn() {
     <div className="flex items-center justify-between w-screen h-screen px-5">
       <div className="hidden lg:relative w-[50%] bg-gra-200 p-28  lg:flex items-center justify-center">
         <img src={frame1} className="rotate-clockwise absolute w-[720px]" />
-        <img src={Logo} className="fixed z-10 w-[350px]" />
+        <img src={Logo} className="fixed z-10 w-[320px]" />
       </div>
       <div className="w-[100%] lg:w-[50%] bg-gra-200 flex justify-center">
         <Card className="w-96 shadow-lg">

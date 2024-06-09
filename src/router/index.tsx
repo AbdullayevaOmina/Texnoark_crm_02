@@ -6,14 +6,15 @@ import {
 } from "react-router-dom";
 import App from "../App";
 import {
-  Brands,
-  Categories,
   Home,
+  Categories,
+  SingleCategory,
+  Brands,
+  SingleBrand,
+  Products,
   Models,
   NotFound,
-  Products,
   Settings,
-  SingleCategory,
 } from "@pages";
 import { MainLayout, SignIn, SignUp } from "@layout";
 import { getDataFromCookie } from "@cookie";
@@ -21,6 +22,7 @@ import { getDataFromCookie } from "@cookie";
 
 const index = () => {
   const id = getDataFromCookie("parent_category_id");
+  const brand_id = getDataFromCookie("brand_id");
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<App />}>
@@ -45,6 +47,7 @@ const index = () => {
             path={`categories/category=${id}`}
             element={<SingleCategory />}
           />
+          <Route path={`brands/brand=${brand_id}`} element={<SingleBrand />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<NotFound />} />

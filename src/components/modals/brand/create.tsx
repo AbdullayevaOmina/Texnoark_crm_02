@@ -1,7 +1,14 @@
 "use client";
 import { useCategoryStore, useBrandStore } from "@store";
 import { CreateBrand } from "@brands-interface";
-import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
+import {
+  Button,
+  FileInput,
+  Modal,
+  Select,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useState, useEffect } from "react";
 import { schemaBrand } from "@validations";
@@ -129,8 +136,7 @@ export function CreateBrandModal() {
                   <Field name="file">
                     {({ field }: { field: any }) => (
                       <div>
-                        <input
-                          type="file"
+                        <FileInput
                           accept="image/*"
                           onChange={(event) => {
                             if (

@@ -1,10 +1,10 @@
 import {
-  DeleteSubCategoryModal,
-  UpdateSubCategoryModal,
-  CreateSubCategoryModal,
+  CreateBrandCategoryModal,
+  UpdateBrandCategoryModal,
+  DeleteBrandCategoryModal,
 } from "@modals";
 import { getDataFromCookie } from "@cookie";
-import { useCategoryStore, useSubCategoryStore } from "@store";
+import { useBCStore } from "@store";
 import { Spinner, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -12,30 +12,24 @@ import { GlobalPagination } from "@ui";
 
 const TableHeader = [{ key: "name", value: "Name" }];
 
-const SingleCategorie = () => {
+const SingleBrand = () => {
   const location = useLocation();
   const [search, setSearch] = useState("");
-  const parent_category_id = getDataFromCookie("parent_category_id");
-  const { get, isLoading, totalCount } = useCategoryStore();
-  const { getAll, subData } = useSubCategoryStore();
-  const [data, setData] = useState<any>({});
+  const brand_id = getDataFromCookie("brand_id");
+  const brand_name = getDataFromCookie("brand_name");
+  const { data_bc, getAll_bcs, totalCount, isLoading } = useBCStore();
   const [params, setParams] = useState({
     page: 1,
-    limit: 2,
-    search: search,
-    parent_category_id: parent_category_id,
+    limit: 10,
+    id: brand_id,
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await get(parent_category_id);
-      setData(res);
-      await getAll(params);
+      await getAll_bcs(params);
     };
     fetchData();
-  }, [parent_category_id, get, getAll, params]);
-
-  console.log(totalCount);
+  }, [params, search]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -66,13 +60,10 @@ const SingleCategorie = () => {
       ) : (
         <div>
           <div className="flex justify-between">
-            <h1 className="text-xl">{data.name}</h1>
-            <CreateSubCategoryModal
-              parent_category_id={parent_category_id}
-              buttonTip={true}
-            />
+            <h1 className="text-xl font-bold">{brand_name}</h1>
+            <CreateBrandCategoryModal brand_id={brand_id} buttonTip={true} />
           </div>
-          {subData.length !== 0 ? (
+          {data_bc.length !== 0 ? (
             <div className="overflow-x-auto mt-5">
               <Table>
                 <Table.Head>
@@ -82,7 +73,7 @@ const SingleCategorie = () => {
                   <Table.HeadCell />
                 </Table.Head>
                 <Table.Body className="divide-y">
-                  {subData.map((row, rowIndex) => (
+                  {data_bc.map((row, rowIndex) => (
                     <Table.Row
                       key={rowIndex}
                       className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -93,14 +84,14 @@ const SingleCategorie = () => {
                         </Table.Cell>
                       ))}
                       <Table.Cell className="flex gap-3">
-                        <UpdateSubCategoryModal
+                        <UpdateBrandCategoryModal
                           id={row.id}
                           data={{
                             name: row.name,
-                            parent_category_id: +parent_category_id,
+                            brand_id: +brand_id,
                           }}
                         />
-                        <DeleteSubCategoryModal id={row.id} />
+                        <DeleteBrandCategoryModal id={row.id} />
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -125,4 +116,4 @@ const SingleCategorie = () => {
   );
 };
 
-export default SingleCategorie;
+export default SingleBrand;
