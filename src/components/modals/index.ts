@@ -19,6 +19,11 @@ import { CreateBrandCategoryModal } from "./brand-category/create";
 import { DeleteBrandCategoryModal } from "./brand-category/delete";
 import { UpdateBrandCategoryModal } from "./brand-category/update";
 
+// brand
+import { CreateProductModal } from "./products/create";
+import { DeleteProductModal } from "./products/delete";
+import { UpdateProductModal } from "./products/update";
+
 export {
   Ask,
   CreateCategoryModal,
@@ -33,4 +38,7 @@ export {
   CreateBrandModal,
   DeleteBrandModal,
   UpdateBrandModal,
+  CreateProductModal,
+  DeleteProductModal,
+  UpdateProductModal,
 };

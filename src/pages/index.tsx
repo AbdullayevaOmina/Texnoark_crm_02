@@ -4,7 +4,7 @@ import SingleCategory from "./categories/SingleCategory";
 import Brands from "./brands/index";
 import SingleBrand from "./brands/SingleBrand";
 import Products from "./products/index";
-import Models from "./models/index";
+import SingleProduct from "./products/SingleProduct";
 import Settings from "./settings/index";
 import NotFound from "./notfound";
 export {
@@ -15,6 +15,6 @@ export {
   SingleBrand,
   Products,
   NotFound,
-  Models,
   Settings,
+  SingleProduct,
 };

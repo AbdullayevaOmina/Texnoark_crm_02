@@ -41,3 +41,12 @@ export const schemaBrand = Yup.object().shape({
   category_id: Yup.number().required("Category is required"),
   file: Yup.mixed().required("Brand file is required"),
 });
+
+// ---------------------- Product ----------------------
+export const schemaProduct = Yup.object().shape({
+  category_id: Yup.number().required("Category is required"),
+  brand_id: Yup.number().required("Brand is required"),
+  brand_category_id: Yup.number().required("Brand category is required"),
+  name: Yup.string().required("Product name is required"),
+  price: Yup.number().required("Brand name is required"),
+});

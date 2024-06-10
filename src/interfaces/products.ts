@@ -9,7 +9,7 @@ export interface GetAll {
 // POST
 export interface CreateProduct {
   name: string;
-  price: number;
+  price: number |null | undefined;
   category_id: number;
   brand_category_id: number;
   brand_id: number;

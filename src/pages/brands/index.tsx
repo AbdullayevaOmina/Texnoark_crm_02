@@ -8,7 +8,7 @@ import {
 import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { GlobalPagination } from "@ui";
+import { GlobalPagination, TableSkeleton } from "@ui";
 import { setDataToCookie } from "@cookie";
 import { eyeIcon } from "@global-icons";
 
@@ -53,7 +53,7 @@ const Index = () => {
       <div className="flex justify-end mb-3">
         <CreateBrandModal />
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <Table hoverable>
           <Table.Head>
             {TableHeader.map((item) => (
@@ -62,7 +62,7 @@ const Index = () => {
             <Table.HeadCell />
           </Table.Head>
           <Table.Body className="divide-y">
-            {!isLoading &&
+            {!isLoading ? (
               data.map((row) => (
                 <Table.Row
                   key={row.id}
@@ -92,7 +92,10 @@ const Index = () => {
                     <DeleteBrandModal id={row.id} />
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              ))
+            ) : (
+              <TableSkeleton />
+            )}
           </Table.Body>
         </Table>
         {totalCount > 1 && (
