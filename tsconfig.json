@@ -41,6 +41,7 @@
       "@category-interface": ["./src/interfaces/category.ts"],
       "@brands-interface": ["./src/interfaces/brands.ts"],
       "@products-interface": ["./src/interfaces/products.ts"],
+      "@product-detail-interface": ["./src/interfaces/product-detail.ts"],
 
       // --------------------------------------------------------
       "@validations": ["./src/validations"],

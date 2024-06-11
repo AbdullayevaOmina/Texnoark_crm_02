@@ -336,7 +336,7 @@ export const deleteIcon = (
 export const editIcon2 = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-7 w-7 mr-2 -ml-0.5 hover:text-yellow-200"
+    className="h-6 w-6 mr-2 -ml-0.5 hover:text-yellow-200"
     viewBox="0 0 20 20"
     fill="currentColor"
     aria-hidden="true"
@@ -353,7 +353,7 @@ export const editIcon2 = (
 export const deleteIcon2 = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-7 w-7 mr-2 -ml-0.5 hover:text-rose-600"
+    className="h-6 w-6 mr-2 -ml-0.5 hover:text-rose-600"
     viewBox="0 0 20 20"
     fill="currentColor"
     aria-hidden="true"

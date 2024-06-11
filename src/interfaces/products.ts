@@ -28,7 +28,7 @@ export interface ProductStore {
   totalCount: number;
   create: (data: CreateProduct) => Promise<any>;
   update: (data: UpdateProduct) => Promise<any>;
-  get: (id: string) => Promise<any>;
+  get: (id: any) => Promise<any>;
   getAll: (params: GetAll) => Promise<any>;
   deleteProduct: (id: string) => Promise<any>;
 }
@@ -36,7 +36,7 @@ export interface ProductStore {
 export interface Request {
   create: (data: CreateProduct) => unknown;
   update: (data: UpdateProduct) => unknown;
-  get: (id: string) => unknown;
+  get: (id: any) => unknown;
   getAll: (params: GetAll) => unknown;
   deleteProduct: (id: string) => unknown;
 }

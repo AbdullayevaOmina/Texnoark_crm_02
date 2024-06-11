@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { ProductStore } from "@products-interface";
-import { products } from "@service";
+import { ProductDetailStore } from "@product-detail-interface";
+import { productDetail } from "@service";
 import { toast } from "react-toastify";
 
-const useProductsStore = create<ProductStore>((set, get) => ({
+const useProductsStore = create<ProductDetailStore>((set, get) => ({
   data: [],
   isLoading: false,
   totalCount: 1,
@@ -11,9 +11,9 @@ const useProductsStore = create<ProductStore>((set, get) => ({
   create: async (reqdata) => {
     set({ isLoading: true });
     try {
-      const response: any = await products.create(reqdata);
+      const response: any = await productDetail.create(reqdata);
       if (response.status === 201) {
-        toast.success("product created successfully");
+        toast.success("product detail created successfully");
         console.log(response);
         const currentData = get().data;
         console.log(currentData);
@@ -32,7 +32,7 @@ const useProductsStore = create<ProductStore>((set, get) => ({
   update: async (data) => {
     set({ isLoading: true });
     try {
-      const response: any = await products.update(data);
+      const response: any = await productDetail.update(data);
       if (response.status === 200) {
         toast.success("product updated successfully");
         const currentData = get().data;
@@ -54,7 +54,7 @@ const useProductsStore = create<ProductStore>((set, get) => ({
   get: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await products.get(id);
+      const response: any = await productDetail.get(id);
       if (response.status === 200) {
         return response.data.data;
       }
@@ -70,7 +70,7 @@ const useProductsStore = create<ProductStore>((set, get) => ({
   getAll: async (params) => {
     set({ isLoading: true });
     try {
-      const response: any = await products.getAll(params);
+      const response: any = await productDetail.getAll(params);
       if (response.status === 200) {
         set({
           data: response.data.data.products,
@@ -89,7 +89,7 @@ const useProductsStore = create<ProductStore>((set, get) => ({
   deleteProduct: async (id) => {
     set({ isLoading: true });
     try {
-      const response: any = await products.deleteProduct(id);
+      const response: any = await productDetail.deleteProduct(id);
       if (response.status === 200) {
         toast.success("product deleted successfully");
         const currentData = get().data;

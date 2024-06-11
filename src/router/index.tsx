@@ -24,7 +24,7 @@ import { getDataFromCookie } from "@cookie";
 const index = () => {
   const id = getDataFromCookie("parent_category_id");
   const brand_id = getDataFromCookie("brand_id");
-  const product_id = getDataFromCookie("product_id");
+  const product_id = localStorage.getItem("product_id");
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<App />}>

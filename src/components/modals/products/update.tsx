@@ -102,20 +102,12 @@ export function UpdateProductModal({ product }: any) {
                             handleCategory(e);
                           }}
                         >
-                          <option disabled>Select Category</option>
+                          <option selected disabled>
+                            Select Category
+                          </option>
                           {categories.map((item, index) => (
-                            <option
-                              selected={item.id === product.category_id}
-                              key={index}
-                              value={
-                                item.id === product.category_id
-                                  ? product.category_id
-                                  : item.id
-                              }
-                            >
-                              {item.id === product.category_id
-                                ? product.name
-                                : item.name}
+                            <option key={index} value={item.id}>
+                              {item.name}
                             </option>
                           ))}
                         </Select>
@@ -149,7 +141,9 @@ export function UpdateProductModal({ product }: any) {
                           handleBrand(e);
                         }}
                       >
-                        <option disabled>Select Brand</option>
+                        <option selected disabled>
+                          Select Brand
+                        </option>
                         {brands.map((item) => (
                           <option
                             selected={item.id === product.brand_id}
@@ -180,20 +174,12 @@ export function UpdateProductModal({ product }: any) {
                           />
                         }
                       >
-                        <option disabled>Select Brand Category</option>
+                        <option selected disabled>
+                          Select Brand Category
+                        </option>
                         {brandCategories.map((item) => (
-                          <option
-                            selected={item.id === product.brand_category_id}
-                            key={item.id}
-                            value={
-                              item.id === product.brand_category_id
-                                ? product.brand_category_id
-                                : item.id
-                            }
-                          >
-                            {item.id === product.brand_category_id
-                              ? product.name
-                              : item.name}
+                          <option key={item.id} value={item.id}>
+                            {item.name}
                           </option>
                         ))}
                       </Select>

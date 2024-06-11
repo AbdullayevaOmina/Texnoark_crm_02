@@ -8,7 +8,6 @@ import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GlobalPagination, TableSkeleton } from "@ui";
-import { setDataToCookie } from "@cookie";
 import { eyeIcon } from "@global-icons";
 
 const TableHeader = [
@@ -77,8 +76,7 @@ const Index = () => {
                   <Table.Cell className="flex gap-3">
                     <button
                       onClick={() => {
-                        setDataToCookie("product_id", row.id);
-
+                        localStorage.setItem("product_id", row.id);
                         navigate(`product=${row.id}`);
                         window.location.reload();
                       }}

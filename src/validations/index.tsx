@@ -58,3 +58,12 @@ export const schemaProductupdate = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
   price: Yup.number().required("Price is required"),
 });
+
+// ---------------------- Product ----------------------
+export const schemaProductDetail = Yup.object().shape({
+  quantity: Yup.number().required("quantity is required"),
+  discount: Yup.number().required("discount is required"),
+  description: Yup.string().required("description is required"),
+  product_id: Yup.number().required("product category is required"),
+  colors: Yup.string().required("colors is required"),
+});

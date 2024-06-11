@@ -19,10 +19,15 @@ import { CreateBrandCategoryModal } from "./brand-category/create";
 import { DeleteBrandCategoryModal } from "./brand-category/delete";
 import { UpdateBrandCategoryModal } from "./brand-category/update";
 
-// brand
+// product
 import { CreateProductModal } from "./products/create";
 import { DeleteProductModal } from "./products/delete";
 import { UpdateProductModal } from "./products/update";
+
+// product
+import { CreateProductDetailModal } from "./product-detail/create";
+import { DeleteProductDetailModal } from "./product-detail/delete";
+import { UpdateProductDetailModal } from "./product-detail/update";
 
 export {
   Ask,
@@ -41,4 +46,7 @@ export {
   CreateProductModal,
   DeleteProductModal,
   UpdateProductModal,
+  CreateProductDetailModal,
+  DeleteProductDetailModal,
+  UpdateProductDetailModal,
 };

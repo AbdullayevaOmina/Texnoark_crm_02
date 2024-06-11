@@ -1,116 +1,106 @@
-import {
-  CreateProductModal,
-  UpdateProductModal,
-  DeleteProductModal,
-} from "@modals";
-import { getDataFromCookie } from "@cookie";
-import { useBCStore } from "@store";
-import { Spinner, Table } from "flowbite-react";
+import { editIcon2 } from "@global-icons";
+import { useProductsStore } from "@store";
+import { Carousel } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { GlobalPagination } from "@ui";
-
-const TableHeader = [{ key: "name", value: "Name" }];
+import {
+  CreateProductDetailModal,
+  DeleteProductDetailModal,
+  UpdateProductDetailModal,
+} from "@modals";
 
 const SingleProduct = () => {
-  const location = useLocation();
-  const [search, setSearch] = useState("");
-  const brand_id = getDataFromCookie("brand_id");
-  const brand_name = getDataFromCookie("brand_name");
-  const { data_bc, getAll_bcs, totalCount, isLoading } = useBCStore();
-  const [params, setParams] = useState({
-    page: 1,
-    limit: 10,
-    id: brand_id,
-  });
+  const product_id = localStorage.getItem("product_id");
+  const [productData, setProductData] = useState<any>([]);
+  const [productDetailData, setProductDetailData] = useState<any>([]);
+
+  const { get } = useProductsStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      await getAll_bcs(params);
-    };
-    fetchData();
-  }, [params, search]);
+    async function fetchData() {
+      const res = await get(product_id);
+      setProductData(res.product);
+      setProductDetailData(res.product_detail);
+    }
+    if (product_id) {
+      fetchData();
+    }
+  }, [product_id]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const page = params.get("page");
-    const pageNumber = page ? parseInt(page) : 1;
-    const search = params.get("search") || "";
-    setSearch(search);
-    setParams((prevParams) => ({
-      ...prevParams,
-      page: pageNumber,
-      search: search,
-    }));
-  }, [location.search]);
-
-  const changePage = (value: number) => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      page: value,
-    }));
-  };
+  console.log(productDetailData);
 
   return (
     <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
-      {isLoading ? (
-        <div className="mt-16 text-center">
-          <Spinner aria-label="Center-aligned spinner example" />
+      {productDetailData && productDetailData.images ? (
+        <div>
+          <div className="flex flex-col md:flex-row mt-6 gap-5 ">
+            <div
+              className="h-80 w-80
+             flex-1"
+            >
+              <Carousel slide={false} className="pb-3">
+                {productDetailData.images.length > 0 ? (
+                  productDetailData.images.map((item, _) => (
+                    <img src={item} key={_} />
+                  ))
+                ) : (
+                  <img src={productDetailData.images[0]} alt="Product image" />
+                )}
+              </Carousel>
+            </div>
+
+            <div className="flex flex-col gap-3 flex-1">
+              <div className="flex items-center gap-4 text-xl">
+                <h1 className="text-gray-400">Name:</h1>
+                <span className="text-2xl">{productData?.name}</span>
+              </div>
+
+              <div className="flex items-center gap-4 text-xl ">
+                <span className="text-gray-400">Colors:</span>
+                <div className="ml-5 flex gap-2">
+                  {productDetailData.colors.length > 0 ? (
+                    productDetailData.colors.map((color, index) => (
+                      <div
+                        key={index}
+                        style={{ backgroundColor: color }}
+                        className="rounded-lg px-4"
+                      >
+                        {color}
+                      </div>
+                    ))
+                  ) : (
+                    <span>No colors available</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 text-xl">
+                <h1 className="text-gray-400">Price:</h1>
+                <span>$ {productData.price}</span>
+              </div>
+              <div className="flex items-center gap-4 text-xl">
+                <h1 className="text-gray-400">Quantitiy:</h1>
+                <span>{productDetailData.quantity}</span>
+              </div>
+              <div className="flex items-center gap-4 text-xl">
+                <h1 className="text-gray-400">Discount:</h1>
+                <span>{productDetailData.discount}%</span>
+              </div>
+              <div className="flex items-center gap-4 text-xl">
+                <h1 className="text-gray-400">Description:</h1>
+                <span className="text-[16px]">
+                  {productDetailData.description}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full justify-end gap-3 mt-16">
+            <button>{editIcon2}</button>
+            {/* <UpdateProductDetailModal/> */}
+            <DeleteProductDetailModal id={product_id} />
+          </div>
         </div>
       ) : (
-        <div>
-          <div className="flex justify-between">
-            <h1 className="text-xl font-bold">{brand_name}</h1>
-            <CreateProductModal brand_id={brand_id} buttonTip={true} />
-          </div>
-          {data_bc.length !== 0 ? (
-            <div className="overflow-x-auto mt-5">
-              <Table>
-                <Table.Head>
-                  {TableHeader.map((item, index) => (
-                    <Table.HeadCell key={index}>{item.value}</Table.HeadCell>
-                  ))}
-                  <Table.HeadCell />
-                </Table.Head>
-                <Table.Body className="divide-y">
-                  {data_bc.map((row, rowIndex) => (
-                    <Table.Row
-                      key={rowIndex}
-                      className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      {TableHeader.map((header, cellIndex) => (
-                        <Table.Cell key={cellIndex}>
-                          {row[header.key]}
-                        </Table.Cell>
-                      ))}
-                      <Table.Cell className="flex gap-3">
-                        <UpdateProductModal
-                          id={row.id}
-                          data={{
-                            name: row.name,
-                            brand_id: +brand_id,
-                          }}
-                        />
-                        <DeleteProductModal id={row.id} />
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-              {totalCount > 1 && (
-                <GlobalPagination
-                  totalPages={totalCount}
-                  currentPage={params.page}
-                  onPageChange={changePage}
-                />
-              )}
-            </div>
-          ) : (
-            <h1 className="text-center text-2xl mt-20 text-gray-500">
-              There are no subcategories yet
-            </h1>
-          )}
-        </div>
+        <CreateProductDetailModal product_id={product_id} />
       )}
     </div>
   );
