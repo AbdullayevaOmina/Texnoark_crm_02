@@ -12,17 +12,23 @@ const useRegisterStore = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const response: any = await auth.signin(data);
-      if (response.status === 200) {
+      console.log(response);
+
+      if (response.status === 201) {
         set({ data: response.data.admin });
-        setDataToCookie("access_token", response.data.data.token);
-        setDataToCookie("last_name", response.data.data.admin.last_name);
-        setDataToCookie("first_name", response.data.data.admin.first_name);
-        setDataToCookie("admin_email", response.data.data.admin.email);
+        setDataToCookie("access_token", response.data.data.tokens.access_token);
+        setDataToCookie(
+          "refresh_token",
+          response.data.data.tokens.refresh_token
+        );
+        setDataToCookie("first_name", response.data.data.data.first_name);
+        setDataToCookie("last_name", response.data.data.data.last_name);
+        setDataToCookie("admin_email", response.data.data.data.email);
         setDataToCookie(
           "admin_phone_number",
-          response.data.data.admin.phone_number
+          response.data.data.data.phone_number
         );
-        setDataToCookie("admin_id", response.data.data.admin.id);
+        setDataToCookie("admin_id", response.data.data.data.id);
       } else if (response.status === 400)
         toast.warning("Wrong email or password!");
       else if (response.status === 404)

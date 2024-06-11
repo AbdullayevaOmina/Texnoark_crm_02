@@ -1,5 +1,5 @@
 "use client";
-import { useBrandStore } from "@store";
+import { useProductsStore } from "@store";
 import { deleteIcon } from "@global-icons";
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
@@ -7,19 +7,19 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export function DeleteProductModal({ id }: any) {
   const [openModal, setOpenModal] = useState(false);
-  const { deleteBrand } = useBrandStore();
+  const { deleteProduct } = useProductsStore();
 
   const handleDelete = async (e: any) => {
     e.preventDefault();
     console.log(id);
 
     try {
-      const responseStatus = await deleteBrand(id);
+      const responseStatus = await deleteProduct(id);
       if (responseStatus === 200) {
         setOpenModal(false);
       }
     } catch (error) {
-      console.error("Delete category error:", error);
+      console.error("Delete product error:", error);
     }
   };
 

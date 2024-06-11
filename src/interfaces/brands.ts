@@ -64,6 +64,7 @@ export interface BrandStore {
   update: (data: UpdateBrand) => Promise<any>;
   get: (id: number) => Promise<any>;
   getAll: (params: GetAll) => Promise<any>;
+  getAllBrandByCategoryId: (params: GetBCs) => Promise<any>;
   deleteBrand: (id: number) => Promise<any>;
 }
 
@@ -82,6 +83,7 @@ export interface BC_Store {
 export interface Request {
   get: (id: number) => unknown;
   getAll: (params: GetAll) => unknown;
+  getAllBrandByCategoryId: (params: GetBCs) => unknown;
   create: (data: CreateBrand) => unknown;
   update: (data: UpdateBrand) => unknown;
   deleteBrand: (id: number) => unknown;

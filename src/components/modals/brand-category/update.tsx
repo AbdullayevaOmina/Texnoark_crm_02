@@ -25,12 +25,7 @@ export function UpdateBrandCategoryModal({ id, data }: { id: any; data: any }) {
 
   return (
     <>
-      <button
-        className="hover:text-yellow-300"
-        onClick={() => setOpenModal(true)}
-      >
-        {editIcon}
-      </button>
+      <button onClick={() => setOpenModal(true)}>{editIcon}</button>
       <Modal
         show={openModal}
         size="md"

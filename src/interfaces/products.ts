@@ -9,10 +9,10 @@ export interface GetAll {
 // POST
 export interface CreateProduct {
   name: string;
-  price: number |null | undefined;
-  category_id: number;
-  brand_category_id: number;
-  brand_id: number;
+  price: number | null | undefined;
+  category_id: number | null | undefined;
+  brand_category_id: number | null | undefined;
+  brand_id: number | null | undefined;
 }
 
 // PUT

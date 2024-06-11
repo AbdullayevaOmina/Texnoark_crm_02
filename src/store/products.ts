@@ -55,7 +55,6 @@ const useProductsStore = create<ProductStore>((set, get) => ({
     set({ isLoading: true });
     try {
       const response: any = await products.get(id);
-      console.log(response);
       if (response.status === 200) {
         return response.data;
       }
@@ -72,7 +71,6 @@ const useProductsStore = create<ProductStore>((set, get) => ({
     set({ isLoading: true });
     try {
       const response: any = await products.getAll(params);
-      console.log(response);
       if (response.status === 200) {
         set({
           data: response.data.data.products,

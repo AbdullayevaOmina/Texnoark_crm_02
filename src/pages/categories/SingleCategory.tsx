@@ -35,8 +35,6 @@ const SingleCategorie = () => {
     fetchData();
   }, [parent_category_id, get, getAll, params]);
 
-  console.log(totalCount);
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = params.get("page");

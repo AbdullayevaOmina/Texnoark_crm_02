@@ -8,5 +8,5 @@ export const products: Request = {
       `/products/search?search=${params.search}&limit=${params.limit}&page=${params.page}`
     ),
   update: (data) => request.patch(`/products/update${data.id}`, data.data),
-  deleteProduct: (id) => request.delete(`/products/delete${id}`),
+  deleteProduct: (id) => request.delete(`/products/delete/${id}`),
 };

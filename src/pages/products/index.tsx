@@ -1,8 +1,8 @@
 import { useProductsStore } from "@store";
 import {
-  CreateBrandModal,
-  DeleteBrandModal,
-  UpdateBrandModal,
+  CreateProductModal,
+  DeleteProductModal,
+  UpdateProductModal,
 } from "@modals";
 import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
@@ -50,7 +50,7 @@ const Index = () => {
   return (
     <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
       <div className="flex justify-end mb-3">
-        <CreateBrandModal />
+        <CreateProductModal />
       </div>
       <div className="overflow-x-auto w-full">
         <Table hoverable>
@@ -86,8 +86,8 @@ const Index = () => {
                     >
                       {eyeIcon}
                     </button>
-                    <UpdateBrandModal brand={row} />
-                    <DeleteBrandModal id={row.id} />
+                    <UpdateProductModal product={row} />
+                    <DeleteProductModal id={row.id} />
                   </Table.Cell>
                 </Table.Row>
               ))

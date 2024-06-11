@@ -8,9 +8,14 @@ export const brands: Request = {
     request.get(
       `/brand/search?search=${params.search}&limit=${params.limit}&page=${params.page}`
     ),
+  getAllBrandByCategoryId: (params) =>
+    request.get(
+      `/brand/category/${params.id}?limit=${params.limit}&page=${params.page}`
+    ),
   update: (data) => request.patch(`/brand/update/${data.id}`, data.data),
   deleteBrand: (id) => request.delete(`/brand/delete/${id}`),
 
+  //
   // ++++++++++++++++++++ BC ++++++++++++++++++++
   create_bc: (data) => request.post(`/brand-category/create`, data),
   get_bc: (id) => request.get(`/brand-category/${id}`),

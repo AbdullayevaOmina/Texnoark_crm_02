@@ -16,7 +16,6 @@ export function UpdateCategoryModal({ category }: any) {
     const data = { id: category.id, data: { name: values.name } };
     const status = await update(data);
     if (status === 200) {
-      // Status for a successful update is typically 200
       console.log(status);
       setOpenModal(false);
     }
@@ -24,7 +23,7 @@ export function UpdateCategoryModal({ category }: any) {
 
   return (
     <>
-      <button className="hover:text-yellow-300"  onClick={() => setOpenModal(true)}>{editIcon}</button>
+      <button onClick={() => setOpenModal(true)}>{editIcon}</button>
       <Modal
         show={openModal}
         size="md"

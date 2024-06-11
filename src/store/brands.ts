@@ -89,6 +89,25 @@ const usebrandsStore = create<BrandStore>((set, get) => ({
     }
   },
 
+  getAllBrandByCategoryId: async (params) => {
+    set({ isLoading: true });
+    try {
+      const response: any = await brands.getAllBrandByCategoryId(params);
+      if (response.status === 200) {
+        set({
+          data: response.data.data.brands,
+          totalCount: Math.ceil(response.data.data.count / params.limit),
+        });
+      }
+      return response.status;
+    } catch (error) {
+      console.error("Fetch brands error:", error);
+      toast.error("Failed to fetch brands");
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   deleteBrand: async (id) => {
     set({ isLoading: true });
     try {

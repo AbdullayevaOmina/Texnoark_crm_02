@@ -11,8 +11,6 @@ const useCategoryStore = create<BC_Store>((set, get) => ({
     set({ isLoading: true });
     try {
       const response: any = await brands.create_bc(reqdata);
-      console.log(response);
-
       if (response.status === 201) {
         toast.success("Brand Category created successfully");
         console.log(response);
@@ -57,11 +55,9 @@ const useCategoryStore = create<BC_Store>((set, get) => ({
     set({ isLoading: true });
     try {
       const response: any = await brands.getAll_bc(id);
-      console.log(response);
       if (response.status === 200) {
-        return response.data.data;
+        return response.data.data.brandCategories;
       }
-      
     } catch (error) {
       console.error("Get category error:", error);
       toast.error("Failed to fetch category");

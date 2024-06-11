@@ -1,43 +1,67 @@
 "use client";
-import { useCategoryStore, useBrandStore, useProductsStore } from "@store";
 import {
-  Button,
-  FileInput,
-  Modal,
-  Select,
-  Spinner,
-  TextInput,
-} from "flowbite-react";
+  useCategoryStore,
+  useBrandStore,
+  useBCStore,
+  useProductsStore,
+} from "@store";
+import { Button, Modal, Select, Spinner, TextInput } from "flowbite-react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState, useEffect } from "react";
 import { schemaProduct } from "@validations";
+import { CreateProduct } from "@products-interface";
 
 export function CreateProductModal() {
   const [openModal, setOpenModal] = useState(false);
-  const [imgPreview, setImgPreview] = useState<string | null>(null);
-  const { data, getAll } = useCategoryStore();
+  const { data: categories, getAll: getAllCategories } = useCategoryStore();
+  const { data: brands, getAllBrandByCategoryId } = useBrandStore();
+  const { create } = useProductsStore();
+  const { data_bc: brandCategories, getAll_bcs: getBrandCategories } =
+    useBCStore();
+  const [categoryError, setCategoryError] = useState<any>("");
 
   function onCloseModal() {
     setOpenModal(false);
-    setImgPreview(null);
+    setCategoryError("");
   }
 
   useEffect(() => {
     if (openModal) {
-      getAll({ limit: 1000, page: 1, search: "" });
+      getAllCategories({ limit: 100, page: 1, search: "" }).catch((error) => {
+        setCategoryError(error.message); // Set category error if loading categories fails
+      });
     }
-  }, [openModal, getAll]);
+  }, [openModal, getAllCategories]);
 
-  const initialValues = {
+  const initialValues: CreateProduct = {
     name: "",
     price: null,
-    // category_id: 0,
-    // brand_category_id: 0,
-    // brand_id: 0,
+    category_id: null,
+    brand_category_id: null,
+    brand_id: null,
   };
 
-  const handleSubmit = async (values: any) => {
-    console.log(values);
+  const handleSubmit = async (values: CreateProduct) => {
+    const payload = {
+      ...values,
+      category_id: +values.category_id,
+      brand_category_id: +values.brand_category_id,
+      brand_id: +values.brand_id,
+    };
+    console.log(payload);
+    create(payload);
+    setOpenModal(false);
+  };
+
+  const handleCategory = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = parseInt(e.target.value, 10);
+    await getAllBrandByCategoryId({ page: 1, limit: 100, id: id });
+    setCategoryError("");
+  };
+
+  const handleBrand = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = parseInt(e.target.value, 10);
+    await getBrandCategories({ page: 1, limit: 100, id: id });
   };
 
   return (
@@ -55,50 +79,69 @@ export function CreateProductModal() {
               validationSchema={schemaProduct}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitting, setFieldValue }) => (
+              {({ isSubmitting }) => (
                 <Form className="grid gap-2">
                   <Field name="category_id">
-                    {({ field }: { field: any }) => (
-                      <Select
-                        {...field}
-                        placeholder="Select Category"
-                        helperText={
+                    {({ field }: any) => (
+                      <div>
+                        <Select
+                          {...field}
+                          placeholder="Select Category"
+                          helperText={
+                            <ErrorMessage
+                              name="category_id"
+                              component="small"
+                              className="text-[red]"
+                            />
+                          }
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleCategory(e);
+                          }}
+                        >
+                          <option selected disabled>
+                            Select Category
+                          </option>
+                          {categories.map((item, index) => (
+                            <option key={index} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Select>
+                        {categoryError && (
                           <ErrorMessage
                             name="category_id"
-                            component="small"
-                            className="text-[red]"
-                          />
-                        }
-                      >
-                        <option selected disabled>
-                          Select Category
-                        </option>
-                        {data.map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Select>
+                            component="div"
+                            className="text-red-500"
+                          >
+                            {categoryError}
+                          </ErrorMessage>
+                        )}
+                      </div>
                     )}
                   </Field>
 
-                  <Field name="category_id">
-                    {({ field }: { field: any }) => (
+                  <Field name="brand_id">
+                    {({ field }: any) => (
                       <Select
                         {...field}
                         placeholder="Select Brand"
                         helperText={
                           <ErrorMessage
-                            name="category_id"
+                            name="brand_id"
                             component="small"
                             className="text-[red]"
                           />
                         }
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleBrand(e);
+                        }}
                       >
                         <option selected disabled>
                           Select Brand
                         </option>
-                        {data.map((item) => (
+                        {brands.map((item) => (
                           <option key={item.id} value={item.id}>
                             {item.name}
                           </option>
@@ -108,7 +151,7 @@ export function CreateProductModal() {
                   </Field>
 
                   <Field name="brand_category_id">
-                    {({ field }: { field: any }) => (
+                    {({ field }: any) => (
                       <Select
                         {...field}
                         placeholder="Select Brand Category"
@@ -123,7 +166,7 @@ export function CreateProductModal() {
                         <option selected disabled>
                           Select Brand Category
                         </option>
-                        {data.map((item) => (
+                        {brandCategories.map((item) => (
                           <option key={item.id} value={item.id}>
                             {item.name}
                           </option>
@@ -133,7 +176,7 @@ export function CreateProductModal() {
                   </Field>
 
                   <Field name="name">
-                    {({ field }: { field: any }) => (
+                    {({ field }: any) => (
                       <TextInput
                         {...field}
                         placeholder="Product Name"
@@ -148,7 +191,7 @@ export function CreateProductModal() {
                     )}
                   </Field>
                   <Field name="price">
-                    {({ field }: { field: any }) => (
+                    {({ field }: any) => (
                       <TextInput
                         {...field}
                         placeholder="Price ($)"

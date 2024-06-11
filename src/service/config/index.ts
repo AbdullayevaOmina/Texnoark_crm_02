@@ -3,6 +3,9 @@ import axios from "axios";
 
 const request = axios.create({
   baseURL: "https://ecomapi.ilyosbekdev.uz",
+  headers: {
+    Authorization: `Bearer ${getDataFromCookie("access_token")}`,
+  },
 });
 
 // async function refreshAccessToken() {
@@ -54,7 +57,7 @@ const request = axios.create({
 request.interceptors.request.use((config) => {
   const access_token = getDataFromCookie("access_token");
   if (access_token) {
-    config.headers["Authorization"] =`Bearer ${access_token}`;
+    config.headers["Authorization"] = `Bearer ${access_token}`;
   }
   return config;
 });

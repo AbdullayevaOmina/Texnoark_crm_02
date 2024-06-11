@@ -24,7 +24,7 @@ export default function SignIn() {
     const phNumber = values.phone_number.replace(/\D/g, "");
     const payload = { ...values, phone_number: `+${phNumber}` };
     const status = await signin(payload);
-    if (status === 200) {
+    if (status === 201) {
       navigate("/main");
     } else if (status === 404) navigate("/signup");
   };
