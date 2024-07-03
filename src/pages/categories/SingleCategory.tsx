@@ -79,7 +79,7 @@ const SingleCategorie = () => {
                   ))}
                   <Table.HeadCell />
                 </Table.Head>
-                <Table.Body className="divide-y">
+                <Table.Body className="divide-y text-black dark:text-white lg:text-[18px]">
                   {subData.map((row, rowIndex) => (
                     <Table.Row
                       key={rowIndex}

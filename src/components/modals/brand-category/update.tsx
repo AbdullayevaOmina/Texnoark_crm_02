@@ -61,10 +61,7 @@ export function UpdateBrandCategoryModal({ id, data }: { id: any; data: any }) {
                   />
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <>
-                        <Spinner aria-label="Submitting" size="md" />{" "}
-                        Updating...
-                      </>
+                      <Spinner aria-label="Submitting" size="md" />
                     ) : (
                       "Update"
                     )}

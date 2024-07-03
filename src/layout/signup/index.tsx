@@ -29,7 +29,7 @@ export default function Signin() {
       const response = await signup(payload);
       if (response.status === 201) {
         const resSignIn: any = signin({
-          PhoneNumber: payload.phone_number,
+          phone_number: payload.phone_number,
           password: payload.password,
         });
         if (resSignIn === 200) {

@@ -47,7 +47,7 @@ const Index = () => {
   };
 
   return (
-    <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
+    <div className="p-4 md:pl-[275px] w-full h-[110vh] pt-20">
       <div className="flex justify-end mb-3">
         <CreateProductModal />
       </div>
@@ -59,7 +59,7 @@ const Index = () => {
             ))}
             <Table.HeadCell />
           </Table.Head>
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y text-black dark:text-white lg:text-[18px]">
             {!isLoading ? (
               data.map((row) => (
                 <Table.Row

@@ -8,18 +8,26 @@ export interface GetAll {
 }
 // POST
 export interface CreateProductDetail {
-  quantity: number;
+  quantity: number | null;
   description: string;
   files: object;
   product_id: number;
   colors: string;
-  discount: number;
+  discount: number | null;
+}
+
+export interface CreateProductDetailData {
+  quantity: number | null;
+  description: string;
+  product_id: number;
+  colors: string;
+  discount: number | null;
 }
 
 // PUT
 export interface UpdateProductDetail {
   id: any;
-  data: CreateProductDetail;
+  data: CreateProductDetailData;
 }
 
 // STORE

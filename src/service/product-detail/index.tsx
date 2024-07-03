@@ -11,3 +11,5 @@ export const productDetail: Request = {
     request.patch(`/product-detail/update${data.id}`, data.data),
   deleteProduct: (id) => request.delete(`/product-detail/delete/${id}`),
 };
+
+// product-detail/delete

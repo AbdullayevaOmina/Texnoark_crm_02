@@ -22,31 +22,29 @@ export function CreateProductDetailModal({ product_id }: any) {
     setOpenModal(false);
   }
 
-  const initialValues = {
+  const initialValues: CreateProductDetail = {
     quantity: null,
     description: "",
     files: [],
-    product_id: product_id,
+    product_id: parseInt(product_id),
     colors: "",
     discount: null,
   };
 
   const handleSubmit = async (values: CreateProductDetail) => {
-    const formData = new FormData();
-    selectedFiles.forEach((file) => formData.append("files", selectedFiles));
-    formData.append("quantity", values.quantity);
+    const formData: any = new FormData();
+    selectedFiles.forEach((file) => formData.append("files", file));
+    formData.append("quantity", values.quantity?.toString() || "");
     formData.append("description", values.description);
-    formData.append("product_id", values.product_id);
+    formData.append("product_id", values.product_id.toString());
     formData.append("colors", values.colors);
-    formData.append("discount", values.discount);
-
-    console.log(formData);
-    // Add the actual create logic here3
-    
+    formData.append("discount", values.discount?.toString() || "");
+    const resStatus = await create(formData);
+    if (resStatus === 201) onCloseModal();
   };
 
-  const handleFileChange = (event: any) => {
-    const files = Array.from(event.target.files);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
     setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
   };
 
@@ -142,7 +140,7 @@ export function CreateProductDetailModal({ product_id }: any) {
                           onClick={() => removeFile(index)}
                           className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center"
                         >
-                          &times;
+                          <span className="mb-1">&times;</span>
                         </button>
                       </div>
                     ))}
@@ -150,10 +148,7 @@ export function CreateProductDetailModal({ product_id }: any) {
 
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <>
-                        <Spinner aria-label="Submitting" size="md" />{" "}
-                        Creating...
-                      </>
+                      <Spinner aria-label="Submitting" size="md" />
                     ) : (
                       "Create"
                     )}

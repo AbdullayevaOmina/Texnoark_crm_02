@@ -1,4 +1,3 @@
-import { editIcon2 } from "@global-icons";
 import { useProductsStore } from "@store";
 import { Carousel } from "flowbite-react";
 import { useEffect, useState } from "react";
@@ -13,6 +12,9 @@ const SingleProduct = () => {
   const [productData, setProductData] = useState<any>([]);
   const [productDetailData, setProductDetailData] = useState<any>([]);
 
+  console.log(productData);
+  console.log(productDetailData);
+
   const { get } = useProductsStore();
 
   useEffect(() => {
@@ -26,49 +28,48 @@ const SingleProduct = () => {
     }
   }, [product_id]);
 
-  console.log(productDetailData);
-
   return (
-    <div className="p-4 md:pl-[275px] w-full h-[100vh] pt-20">
+    <div className="p-4 md:pl-[275px] w-full min-h-[100vh] pt-20">
       {productDetailData && productDetailData.images ? (
         <div>
-          <div className="flex flex-col md:flex-row mt-6 gap-5 ">
-            <div
-              className="h-80 w-80
-             flex-1"
-            >
-              <Carousel slide={false} className="pb-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="relative h-56 sm:h-64 xl:h-80 2xl:h-96">
+              <Carousel slideInterval={3000} leftControl=" " rightControl=" ">
                 {productDetailData.images.length > 0 ? (
-                  productDetailData.images.map((item, _) => (
-                    <img src={item} key={_} />
+                  productDetailData.images.map((item, index) => (
+                    <img
+                      src={item}
+                      key={index}
+                      className="h-[100%] object-cover rounded-lg "
+                      alt={`Product image ${index + 1}`}
+                    />
                   ))
                 ) : (
-                  <img src={productDetailData.images[0]} alt="Product image" />
+                  <img
+                    src={productDetailData.images[0]}
+                    className="w-full h-full object-cover rounded-lg"
+                    alt="Product image"
+                  />
                 )}
               </Carousel>
             </div>
 
-            <div className="flex flex-col gap-3 flex-1">
-              <div className="flex items-center gap-4 text-xl">
-                <h1 className="text-gray-400">Name:</h1>
-                <span className="text-2xl">{productData?.name}</span>
-              </div>
+            <div className="flex flex-col gap-3 p-4">
+              <b className="text-xl mb-6">{productData?.name}</b>
 
-              <div className="flex items-center gap-4 text-xl ">
-                <span className="text-gray-400">Colors:</span>
-                <div className="ml-5 flex gap-2">
+              <div className="flex gap-5 items-center">
+                <h1 className="text-gray-400 text-xl">Colors:</h1>
+                <div className="flex gap-2">
                   {productDetailData.colors.length > 0 ? (
                     productDetailData.colors.map((color, index) => (
                       <div
                         key={index}
                         style={{ backgroundColor: color }}
-                        className="rounded-lg px-4"
-                      >
-                        {color}
-                      </div>
+                        className="w-5 h-5 rounded-full border"
+                      />
                     ))
                   ) : (
-                    <span>No colors available</span>
+                    <span className="text-gray-500">No colors available</span>
                   )}
                 </div>
               </div>
@@ -78,29 +79,43 @@ const SingleProduct = () => {
                 <span>$ {productData.price}</span>
               </div>
               <div className="flex items-center gap-4 text-xl">
-                <h1 className="text-gray-400">Quantitiy:</h1>
+                <h1 className="text-gray-400">Quantity:</h1>
                 <span>{productDetailData.quantity}</span>
               </div>
               <div className="flex items-center gap-4 text-xl">
                 <h1 className="text-gray-400">Discount:</h1>
                 <span>{productDetailData.discount}%</span>
               </div>
-              <div className="flex items-center gap-4 text-xl">
-                <h1 className="text-gray-400">Description:</h1>
-                <span className="text-[16px]">
-                  {productDetailData.description}
-                </span>
-              </div>
             </div>
           </div>
+          <div className="text-[16px] mt-10 p-4 ">
+            {productDetailData.description}
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor ipsa
+            enim vitae accusamus eius aliquam iusto repudiandae! Exercitationem
+            at natus, odit tempore quae error. Voluptatibus vel aspernatur
+            consequuntur a molestiae quaerat provident corporis ipsam eveniet
+            autem rem delectus, commodi quae, asperiores laboriosam vero minima
+            doloremque aperiam qui omnis esse fugit. Officia, excepturi
+            expedita. Blanditiis doloribus consequatur, cupiditate nemo
+            voluptates earum mollitia, vero temporibus quaerat omnis quos?
+            Mollitia animi id reiciendis.
+          </div>
+
           <div className="flex w-full justify-end gap-3 mt-16">
-            <button>{editIcon2}</button>
-            {/* <UpdateProductDetailModal/> */}
-            <DeleteProductDetailModal id={product_id} />
+            <UpdateProductDetailModal product_detail={productDetailData} />
+            <DeleteProductDetailModal id={productDetailData.id} />
           </div>
         </div>
       ) : (
-        <CreateProductDetailModal product_id={product_id} />
+        <div>
+          <div className="w-full flex justify-between items-center">
+            <h1 className="text-2xl">{productData.name}</h1>
+            <CreateProductDetailModal product_id={product_id} />
+          </div>
+          <h3 className="text-gray-600 text-center text-xl mt-16">
+            Not Product detail
+          </h3>
+        </div>
       )}
     </div>
   );

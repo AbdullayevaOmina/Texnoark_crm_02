@@ -3,7 +3,7 @@ import { ProductDetailStore } from "@product-detail-interface";
 import { productDetail } from "@service";
 import { toast } from "react-toastify";
 
-const useProductsStore = create<ProductDetailStore>((set, get) => ({
+const useProductDetailStore = create<ProductDetailStore>((set, get) => ({
   data: [],
   isLoading: false,
   totalCount: 1,
@@ -13,10 +13,8 @@ const useProductsStore = create<ProductDetailStore>((set, get) => ({
     try {
       const response: any = await productDetail.create(reqdata);
       if (response.status === 201) {
-        toast.success("product detail created successfully");
-        console.log(response);
+        toast.success("Product detail created successfully");
         const currentData = get().data;
-        console.log(currentData);
         set({ data: [...currentData, response.data.data] });
       }
       return response.status;
@@ -34,7 +32,7 @@ const useProductsStore = create<ProductDetailStore>((set, get) => ({
     try {
       const response: any = await productDetail.update(data);
       if (response.status === 200) {
-        toast.success("product updated successfully");
+        toast.success("Product updated successfully");
         const currentData = get().data;
         const updatedData = currentData.map((item) =>
           item.id === data.id ? response.data.product : item
@@ -51,7 +49,7 @@ const useProductsStore = create<ProductDetailStore>((set, get) => ({
     }
   },
 
-  get: async (id) => {
+  get: async (id: any) => {
     set({ isLoading: true });
     try {
       const response: any = await productDetail.get(id);
@@ -86,12 +84,14 @@ const useProductsStore = create<ProductDetailStore>((set, get) => ({
     }
   },
 
-  deleteProduct: async (id) => {
+  deleteProduct: async (id: any) => {
     set({ isLoading: true });
     try {
-      const response: any = await productDetail.deleteProduct(id);
+      const response: any = await productDetail.deleteProduct(
+        id
+      );
       if (response.status === 200) {
-        toast.success("product deleted successfully");
+        toast.success("Product deleted successfully");
         const currentData = get().data;
         const updatedData = currentData.filter((item) => item.id !== id);
         set({ data: updatedData });
@@ -107,4 +107,4 @@ const useProductsStore = create<ProductDetailStore>((set, get) => ({
   },
 }));
 
-export default useProductsStore;
+export default useProductDetailStore;

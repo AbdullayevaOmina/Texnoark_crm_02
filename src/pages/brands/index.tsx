@@ -61,7 +61,7 @@ const Index = () => {
             ))}
             <Table.HeadCell />
           </Table.Head>
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y text-black dark:text-white lg:text-[18px]">
             {!isLoading ? (
               data.map((row) => (
                 <Table.Row
